@@ -29,7 +29,7 @@ const Image = () => {
   ];
 
   const pokeballImages = [
-    // Pkballs1,
+    Pkballs1,
     Pkballs2,
     Pkballs3,
     Pkballs4,
@@ -40,8 +40,15 @@ const Image = () => {
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [currentPokeballIndex, setCurrentPokeballIndex] = useState(0);
-  const [pokeballInterval, setPokeballInterval] = useState(null);
+  const [currentPokeballIndexes, setCurrentPokeballIndexes] = useState([
+    0, 0, 0,
+  ]);
+  const [pokeballIntervals, setPokeballIntervals] = useState([
+    null,
+    null,
+    null,
+  ]);
+  const [hoveringIndexes, setHoveringIndexes] = useState([false, false, false]);
 
   const transitionImages = (targetIndex) => {
     let index = currentImageIndex;
@@ -72,23 +79,77 @@ const Image = () => {
     transitionImages(7); // Stops at the 8th image (index 7)
   };
 
-  const startPokeballInterval = () => {
-    if (!pokeballInterval) {
+  const startPokeballInterval = (index) => {
+    setHoveringIndexes((prev) => {
+      const newHovering = [...prev];
+      newHovering[index] = true;
+      return newHovering;
+    });
+
+    if (!pokeballIntervals[index]) {
       const interval = setInterval(() => {
-        setCurrentPokeballIndex(
-          (prevIndex) => (prevIndex + 1) % pokeballImages.length
-        );
+        setCurrentPokeballIndexes((prevIndexes) => {
+          const newIndexes = [...prevIndexes];
+          newIndexes[index] =
+            ((newIndexes[index] + 1) % (pokeballImages.length - 1)) + 1; // Start from Pkballs2
+          return newIndexes;
+        });
       }, 200); // Adjust interval time as needed for Pokeballs
-      setPokeballInterval(interval);
+      setPokeballIntervals((prevIntervals) => {
+        const newIntervals = [...prevIntervals];
+        newIntervals[index] = interval;
+        return newIntervals;
+      });
     }
   };
 
-  const stopPokeballInterval = () => {
-    if (pokeballInterval) {
-      clearInterval(pokeballInterval);
-      setPokeballInterval(null);
+  const stopPokeballInterval = (index) => {
+    setHoveringIndexes((prev) => {
+      const newHovering = [...prev];
+      newHovering[index] = false;
+      return newHovering;
+    });
+
+    if (pokeballIntervals[index]) {
+      clearInterval(pokeballIntervals[index]);
+      setPokeballIntervals((prevIntervals) => {
+        const newIntervals = [...prevIntervals];
+        newIntervals[index] = null;
+        return newIntervals;
+      });
+      setCurrentPokeballIndexes((prevIndexes) => {
+        const newIndexes = [...prevIndexes];
+        newIndexes[index] = 0; // Revert back to Pkballs1
+        return newIndexes;
+      });
     }
   };
+
+  useEffect(() => {
+    const runningIntervals = pokeballIntervals.filter(Boolean);
+    if (runningIntervals.length === 0) return;
+
+    const resetPokeballIndexes = () => {
+      setHoveringIndexes((prev) => {
+        const newHovering = [...prev];
+        for (let i = 0; i < newHovering.length; i++) {
+          if (!newHovering[i]) {
+            setCurrentPokeballIndexes((prevIndexes) => {
+              const newIndexes = [...prevIndexes];
+              newIndexes[i] = 0; // Revert back to Pkballs1
+              return newIndexes;
+            });
+          }
+        }
+        return newHovering;
+      });
+    };
+
+    window.addEventListener("mousemove", resetPokeballIndexes);
+    return () => {
+      window.removeEventListener("mousemove", resetPokeballIndexes);
+    };
+  }, [pokeballIntervals]);
 
   return (
     <div>
@@ -105,11 +166,11 @@ const Image = () => {
             isTransitioning ? "pointer-events-none" : ""
           }`}
           onClick={handlePreviousImage}
-          onMouseEnter={startPokeballInterval}
-          onMouseLeave={stopPokeballInterval}
+          onMouseEnter={() => startPokeballInterval(0)}
+          onMouseLeave={() => stopPokeballInterval(0)}
         >
           <img
-            src={pokeballImages[currentPokeballIndex]}
+            src={pokeballImages[currentPokeballIndexes[0]]}
             alt=""
             className="h-full w-full object-cover"
           />
@@ -119,11 +180,11 @@ const Image = () => {
             isTransitioning ? "pointer-events-none" : ""
           }`}
           onClick={handleNextImage}
-          onMouseEnter={startPokeballInterval}
-          onMouseLeave={stopPokeballInterval}
+          onMouseEnter={() => startPokeballInterval(1)}
+          onMouseLeave={() => stopPokeballInterval(1)}
         >
           <img
-            src={pokeballImages[currentPokeballIndex]}
+            src={pokeballImages[currentPokeballIndexes[1]]}
             alt=""
             className="h-full w-full object-cover"
           />
@@ -133,11 +194,11 @@ const Image = () => {
             isTransitioning ? "pointer-events-none" : ""
           }`}
           onClick={handleLastImage}
-          onMouseEnter={startPokeballInterval}
-          onMouseLeave={stopPokeballInterval}
+          onMouseEnter={() => startPokeballInterval(2)}
+          onMouseLeave={() => stopPokeballInterval(2)}
         >
           <img
-            src={pokeballImages[currentPokeballIndex]}
+            src={pokeballImages[currentPokeballIndexes[2]]}
             alt=""
             className="h-full w-full object-cover"
           />
