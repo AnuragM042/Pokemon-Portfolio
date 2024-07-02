@@ -15,6 +15,7 @@ import Pkballs4 from "../assets/Pkballs1_4.png";
 import Pkballs5 from "../assets/Pkballs1_5.png";
 import Pkballs6 from "../assets/Pkballs1_6.png";
 import Pkballs7 from "../assets/Pkballs1_7.png";
+import Projects from "./Projects";
 
 const Image = () => {
   const images = [
@@ -49,6 +50,12 @@ const Image = () => {
     null,
   ]);
   const [hoveringIndexes, setHoveringIndexes] = useState([false, false, false]);
+
+  // Projects show
+  // const [showProjects, setShowProjects] = useState(false);
+  // const toggleProjects = () => {
+  //   setShowProjects(!showProjects);
+  // };
 
   const transitionImages = (targetIndex) => {
     let index = currentImageIndex;
@@ -157,7 +164,7 @@ const Image = () => {
         <img
           src={images[currentImageIndex]}
           alt=""
-          className="h-[600px] bg-white"
+          className="h-[600px] bg-transparent"
         />
       </div>
       <div className="flex justify-center items-center gap-5 mt-5 cursor-pointer">
@@ -174,6 +181,14 @@ const Image = () => {
             alt=""
             className="h-full w-full object-cover"
           />
+          <div
+            className={`text-center mt-2  bg-black text-white text-xl rounded-2xl opacity-70 p-4 ${
+              hoveringIndexes[0] ? "block" : "md:hidden"
+            }`}
+            onClick={toggleProjects}
+          >
+            Projects
+          </div>
         </div>
         <div
           className={`rounded-full h-[100px] w-[100px] ${
@@ -188,9 +203,16 @@ const Image = () => {
             alt=""
             className="h-full w-full object-cover"
           />
+          <div
+            className={`text-center mt-2  bg-black text-white text-xl rounded-2xl opacity-70 p-4 ${
+              hoveringIndexes[1] ? "block" : "md:hidden"
+            }`}
+          >
+            Contact
+          </div>
         </div>
         <div
-          className={`rounded-full h-[100px] w-[100px] flex justify-center items-center overflow-hidden ${
+          className={`rounded-full h-[100px] w-[100px]  ${
             isTransitioning ? "pointer-events-none" : ""
           }`}
           onClick={handleLastImage}
@@ -202,6 +224,13 @@ const Image = () => {
             alt=""
             className="h-full w-full object-cover"
           />
+          <div
+            className={`text-center mt-2  bg-black text-white text-xl rounded-2xl opacity-70 p-4 ${
+              hoveringIndexes[2] ? "block" : "md:hidden"
+            }`}
+          >
+            About
+          </div>
         </div>
       </div>
     </div>
