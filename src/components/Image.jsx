@@ -185,7 +185,7 @@ const Image = () => {
             className={`text-center mt-2  bg-black text-white text-xl rounded-2xl opacity-70 p-4 ${
               hoveringIndexes[0] ? "block" : "md:hidden"
             }`}
-            onClick={toggleProjects}
+           
           >
             Projects
           </div>
