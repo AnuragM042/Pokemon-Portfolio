@@ -162,7 +162,7 @@ const Image = () => {
       </div>
       <div className="flex justify-center items-center gap-5 mt-5 cursor-pointer">
         <div
-          className={`rounded-full h-[100px] ${
+          className={`rounded-full h-[120px] w-[120px] ${
             isTransitioning ? "pointer-events-none" : ""
           }`}
           onClick={handlePreviousImage}
@@ -176,7 +176,7 @@ const Image = () => {
           />
         </div>
         <div
-          className={`rounded-full h-[100px] ${
+          className={`rounded-full h-[100px] w-[100px] ${
             isTransitioning ? "pointer-events-none" : ""
           }`}
           onClick={handleNextImage}
@@ -190,7 +190,7 @@ const Image = () => {
           />
         </div>
         <div
-          className={`rounded-full h-[100px] flex justify-center items-center overflow-hidden ${
+          className={`rounded-full h-[100px] w-[100px] flex justify-center items-center overflow-hidden ${
             isTransitioning ? "pointer-events-none" : ""
           }`}
           onClick={handleLastImage}
