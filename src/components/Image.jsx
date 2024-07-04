@@ -16,6 +16,8 @@ import Pkballs5 from "../assets/Pkballs1_5.png";
 import Pkballs6 from "../assets/Pkballs1_6.png";
 import Pkballs7 from "../assets/Pkballs1_7.png";
 import Projects from "./Projects";
+import About from "./About";
+import Loader from "./Loader"; // Import the Loader component
 
 const Image = () => {
   const images = [
@@ -51,11 +53,20 @@ const Image = () => {
   ]);
   const [hoveringIndexes, setHoveringIndexes] = useState([false, false, false]);
 
-  // Projects show
-  // const [showProjects, setShowProjects] = useState(false);
-  // const toggleProjects = () => {
-  //   setShowProjects(!showProjects);
-  // };
+  // Projects and About show
+  const [showProjects, setShowProjects] = useState(false);
+  const [showAbout, setShowAbout] = useState(false); // State for About
+  const [loading, setLoading] = useState(true); // Loading state
+  const [showProjectsLoading, setShowProjectsLoading] = useState(false); // Loading state for Projects
+
+  useEffect(() => {
+    // Simulate loading time
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000); // Adjust the loading time as needed
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const transitionImages = (targetIndex) => {
     let index = currentImageIndex;
@@ -87,12 +98,6 @@ const Image = () => {
   };
 
   const startPokeballInterval = (index) => {
-    setHoveringIndexes((prev) => {
-      const newHovering = [...prev];
-      newHovering[index] = true;
-      return newHovering;
-    });
-
     if (!pokeballIntervals[index]) {
       const interval = setInterval(() => {
         setCurrentPokeballIndexes((prevIndexes) => {
@@ -111,12 +116,6 @@ const Image = () => {
   };
 
   const stopPokeballInterval = (index) => {
-    setHoveringIndexes((prev) => {
-      const newHovering = [...prev];
-      newHovering[index] = false;
-      return newHovering;
-    });
-
     if (pokeballIntervals[index]) {
       clearInterval(pokeballIntervals[index]);
       setPokeballIntervals((prevIntervals) => {
@@ -158,6 +157,32 @@ const Image = () => {
     };
   }, [pokeballIntervals]);
 
+  const handleProjectsClick = () => {
+    handlePreviousImage(); // Ensure the main image changes first
+    setShowProjectsLoading(true);
+    setTimeout(() => {
+      setShowProjects(true);
+      setShowProjectsLoading(false);
+    }, 1000); // Delay of 1 second
+  };
+
+  const handleAboutClick = () => {
+    handleLastImage(); // Ensure the main image changes first
+    setShowProjectsLoading(true);
+    setTimeout(() => {
+      setShowAbout(true);
+      setShowProjectsLoading(false);
+    }, 1000); // Delay of 1 second
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-transparent">
+        <Loader />
+      </div>
+    );
+  }
+
   return (
     <div>
       <div className="flex justify-center items-center h-full">
@@ -166,15 +191,61 @@ const Image = () => {
           alt=""
           className="h-[600px] bg-transparent"
         />
+        {showProjectsLoading && (
+          <div className="fixed inset-0 flex items-center justify-center bg-red-500 bg-opacity-50 z-50">
+            <Loader />
+          </div>
+        )}
+        {showProjects && !showProjectsLoading && (
+          <div
+            className="fixed top-0 left-0 w-full h-full bg-red-500 bg-opacity-50 flex justify-center items-center z-50"
+            onClick={() => setShowProjects(false)} // Close Projects when clicking outside
+          >
+            <div
+              className="bg-opacity-80 p-4 rounded-lg w-[300px] h-[370px] md:w-[500px] md:h-[500px] flex justify-center items-center"
+              onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the Projects div
+            >
+              <Projects />
+            </div>
+          </div>
+        )}
+        {showAbout && !showProjectsLoading && (
+          <div
+            className="fixed top-0 left-0 w-full h-full bg-red-500 bg-opacity-50 flex justify-center items-center z-50"
+            onClick={() => setShowAbout(false)} // Close About when clicking outside
+          >
+            <div
+              className="bg-opacity-80 p-4 rounded-lg w-[300px] h-[370px] md:w-[500px] md:h-[500px] flex justify-center items-center"
+              onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the About div
+            >
+              <About onClose={() => setShowAbout(false)} />{" "}
+              {/* Pass onClose prop */}
+            </div>
+          </div>
+        )}
       </div>
       <div className="flex justify-center items-center gap-5 mt-5 cursor-pointer">
         <div
           className={`rounded-full h-[120px] w-[120px] ${
             isTransitioning ? "pointer-events-none" : ""
           }`}
-          onClick={handlePreviousImage}
-          onMouseEnter={() => startPokeballInterval(0)}
-          onMouseLeave={() => stopPokeballInterval(0)}
+          onMouseEnter={() => {
+            setHoveringIndexes((prev) => {
+              const newHovering = [...prev];
+              newHovering[0] = true;
+              return newHovering;
+            });
+            startPokeballInterval(0);
+          }}
+          onMouseLeave={() => {
+            setHoveringIndexes((prev) => {
+              const newHovering = [...prev];
+              newHovering[0] = false;
+              return newHovering;
+            });
+            stopPokeballInterval(0);
+          }}
+          onClick={handleProjectsClick}
         >
           <img
             src={pokeballImages[currentPokeballIndexes[0]]}
@@ -182,10 +253,9 @@ const Image = () => {
             className="h-full w-full object-cover"
           />
           <div
-            className={`text-center mt-2  bg-black text-white text-xl rounded-2xl opacity-70 p-4 ${
-              hoveringIndexes[0] ? "block" : "md:hidden"
+            className={`text-center mt-2 bg-black text-white text-xl rounded-2xl opacity-70 p-4 ${
+              hoveringIndexes[0] ? "block" : "hidden"
             }`}
-           
           >
             Projects
           </div>
@@ -194,9 +264,23 @@ const Image = () => {
           className={`rounded-full h-[100px] w-[100px] ${
             isTransitioning ? "pointer-events-none" : ""
           }`}
+          onMouseEnter={() => {
+            setHoveringIndexes((prev) => {
+              const newHovering = [...prev];
+              newHovering[1] = true;
+              return newHovering;
+            });
+            startPokeballInterval(1);
+          }}
+          onMouseLeave={() => {
+            setHoveringIndexes((prev) => {
+              const newHovering = [...prev];
+              newHovering[1] = false;
+              return newHovering;
+            });
+            stopPokeballInterval(1);
+          }}
           onClick={handleNextImage}
-          onMouseEnter={() => startPokeballInterval(1)}
-          onMouseLeave={() => stopPokeballInterval(1)}
         >
           <img
             src={pokeballImages[currentPokeballIndexes[1]]}
@@ -204,8 +288,8 @@ const Image = () => {
             className="h-full w-full object-cover"
           />
           <div
-            className={`text-center mt-2  bg-black text-white text-xl rounded-2xl opacity-70 p-4 ${
-              hoveringIndexes[1] ? "block" : "md:hidden"
+            className={`text-center mt-2 bg-black text-white text-xl rounded-2xl opacity-70 p-4 ${
+              hoveringIndexes[1] ? "block" : "hidden"
             }`}
           >
             Contact
@@ -215,9 +299,23 @@ const Image = () => {
           className={`rounded-full h-[100px] w-[100px]  ${
             isTransitioning ? "pointer-events-none" : ""
           }`}
-          onClick={handleLastImage}
-          onMouseEnter={() => startPokeballInterval(2)}
-          onMouseLeave={() => stopPokeballInterval(2)}
+          onMouseEnter={() => {
+            setHoveringIndexes((prev) => {
+              const newHovering = [...prev];
+              newHovering[2] = true;
+              return newHovering;
+            });
+            startPokeballInterval(2);
+          }}
+          onMouseLeave={() => {
+            setHoveringIndexes((prev) => {
+              const newHovering = [...prev];
+              newHovering[2] = false;
+              return newHovering;
+            });
+            stopPokeballInterval(2);
+          }}
+          onClick={handleAboutClick}
         >
           <img
             src={pokeballImages[currentPokeballIndexes[2]]}
@@ -225,8 +323,8 @@ const Image = () => {
             className="h-full w-full object-cover"
           />
           <div
-            className={`text-center mt-2  bg-black text-white text-xl rounded-2xl opacity-70 p-4 ${
-              hoveringIndexes[2] ? "block" : "md:hidden"
+            className={`text-center mt-2 bg-black text-white text-xl rounded-2xl opacity-70 p-4 ${
+              hoveringIndexes[2] ? "block" : "hidden"
             }`}
           >
             About

@@ -52,7 +52,7 @@ function Projects() {
 
   return (
     <div className="flex justify-center items-center h-full w-full">
-      <div className="w-1/2 h-1/2 ">
+      <div className="w-full h-full ">
         <Slider {...settings}>
           <div className="flex justify-center h-full">
             <Card className="w-full h-full flex flex-col p-2 border-2 border-black ">
