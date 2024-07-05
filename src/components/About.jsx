@@ -15,19 +15,15 @@ const About = ({ onClose }) => {
               alt="Icon"
               className="rounded-full h-[100px] w-[100px]"
             />
-            <span className="p-4 bg-black opacity-75 text-white text-xl rounded-2xl">
+            <span className="p-4 bg-black bg-opacity-75 text-white text-xl rounded-2xl">
               Hi, I'm <span className="font-bold">Anurag Mishra,</span> a
               20-year-old <span className="font-bold">Frontend Developer </span>
-              with 6 months of experience in JavaScript, CSS, Tailwind CSS,
-              Firebase, Git, UI, and HTML. I'm passionate about creating
-              visually appealing and user-friendly web applications. Currently,
-              I am diving deep into React.js to enhance my skills and build
-              dynamic, modern web interfaces.
+              with 6 months of experience in Html, Css, Javascript , React.js Firebase, Git, UI..
             </span>
           </div>
         </div>
 
-        <div className="border w-full p-4  rounded-2xl sm:text-xl text-lg bg-black text-white opacity-75">
+        <div className="border w-full p-4  rounded-2xl sm:text-xl text-lg bg-black text-white bg-opacity-75">
           <div className="p-2">
             <h2 className="text-center font-bold">Experience</h2>
             <div className="flex justify-around gap-[100px]">
@@ -57,7 +53,7 @@ const About = ({ onClose }) => {
           </div>
         </div>
 
-        <div className="bg-black opacity-75 flex flex-col items-center justify-center border p-2 rounded-2xl">
+        <div className="bg-black bg-opacity-75 flex flex-col items-center justify-center border p-2 rounded-2xl">
           <MdOutlineCoPresent size={40} className="text-white" />
           <a
             href={AnuragResume}

@@ -1,25 +1,32 @@
 import React, { useState, useEffect } from "react";
-import ImageL1_1 from "../assets/left1_1.png";
-import ImageL1_2 from "../assets/left1_2.png";
-import ImageL1_3 from "../assets/left1_3.png";
-import ImageL1_4 from "../assets/left1_4.png";
-import ImageL1_5 from "../assets/left1_5.png";
-import ImageL2_1 from "../assets/left1_6.png";
-import ImageL2_2 from "../assets/left1_7.png";
-import ImageL2_3 from "../assets/left1_8.png";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
+import ImageL1_1 from "../assets/left1_1 _1.webp";
+import ImageL1_2 from "../assets/left1_2.webp";
+import ImageL1_3 from "../assets/left1_3.webp";
+import ImageL1_4 from "../assets/left1_4.webp";
+import ImageL1_5 from "../assets/left1_5.webp";
+import ImageL2_1 from "../assets/left1_6.webp";
+import ImageL2_2 from "../assets/left1_7.webp";
+import ImageL2_3 from "../assets/left1_8.webp";
+import ImageL1_6 from "../assets/left1_9.png";
+import ImageL1_7 from "../assets/left1_10.png";
+import ImageL1_8 from "../assets/left1_11.png";
+import ImageL2_4 from "../assets/left1_12.png";
 
-import Pkballs1 from "../assets/Pkballs1_1.png";
-import Pkballs2 from "../assets/Pkballs1_2.png";
-import Pkballs3 from "../assets/Pkballs1_3.png";
-import Pkballs4 from "../assets/Pkballs1_4.png";
-import Pkballs5 from "../assets/Pkballs1_5.png";
-import Pkballs6 from "../assets/Pkballs1_6.png";
-import Pkballs7 from "../assets/Pkballs1_7.png";
+import Pkballs1 from "../assets/Pkballs1_1.webp";
+import Pkballs2 from "../assets/Pkballs1_2.webp";
+import Pkballs3 from "../assets/Pkballs1_3.webp";
+import Pkballs4 from "../assets/Pkballs1_4.webp";
+import Pkballs5 from "../assets/Pkballs1_5.webp";
+import Pkballs6 from "../assets/Pkballs1_6.webp";
+import Pkballs7 from "../assets/Pkballs1_7.webp";
 import Projects from "./Projects";
 import About from "./About";
-import Loader from "./Loader"; // Import the Loader component
+import Contact from "./Contact"; // Import the Contact component
+import Loader from "./Loader";
 
-const Image = () => {
+const ImageComponent = () => {
   const images = [
     ImageL1_1,
     ImageL1_2,
@@ -53,20 +60,41 @@ const Image = () => {
   ]);
   const [hoveringIndexes, setHoveringIndexes] = useState([false, false, false]);
 
-  // Projects and About show
   const [showProjects, setShowProjects] = useState(false);
-  const [showAbout, setShowAbout] = useState(false); // State for About
-  const [loading, setLoading] = useState(true); // Loading state
-  const [showProjectsLoading, setShowProjectsLoading] = useState(false); // Loading state for Projects
+  const [showAbout, setShowAbout] = useState(false);
+  const [showContact, setShowContact] = useState(false); // State for Contact
+  const [loading, setLoading] = useState(true);
+  const [showProjectsLoading, setShowProjectsLoading] = useState(false);
 
   useEffect(() => {
-    // Simulate loading time
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 2000); // Adjust the loading time as needed
+    const loadImage = (src) => {
+      return new Promise((resolve, reject) => {
+        const img = new window.Image();
+        img.src = src;
+        img.onload = () => {
+          resolve();
+        };
+        img.onerror = (err) => {
+          reject(err);
+        };
+      });
+    };
 
-    return () => clearTimeout(timer);
-  }, []);
+    const preloadImages = async () => {
+      const imagePromises = images.concat(pokeballImages).map(loadImage);
+      try {
+        await Promise.all(imagePromises);
+      } catch (err) {
+        console.error("Error preloading images:", err);
+      } finally {
+        setTimeout(() => {
+          setLoading(false);
+        }, 2000);
+      }
+    };
+
+    preloadImages();
+  }, [images, pokeballImages]);
 
   const transitionImages = (targetIndex) => {
     let index = currentImageIndex;
@@ -82,19 +110,19 @@ const Image = () => {
         return;
       }
       setCurrentImageIndex(index);
-    }, 50); // Adjust interval time as needed
+    }, 50);
   };
 
   const handleNextImage = () => {
-    transitionImages(4); // Stops at the 5th image (index 4)
+    transitionImages(4);
   };
 
   const handlePreviousImage = () => {
-    transitionImages(0); // Transitions back to the first image (index 0)
+    transitionImages(0);
   };
 
   const handleLastImage = () => {
-    transitionImages(7); // Stops at the 8th image (index 7)
+    transitionImages(7);
   };
 
   const startPokeballInterval = (index) => {
@@ -103,10 +131,10 @@ const Image = () => {
         setCurrentPokeballIndexes((prevIndexes) => {
           const newIndexes = [...prevIndexes];
           newIndexes[index] =
-            ((newIndexes[index] + 1) % (pokeballImages.length - 1)) + 1; // Start from Pkballs2
+            ((newIndexes[index] + 1) % (pokeballImages.length - 1)) + 1;
           return newIndexes;
         });
-      }, 200); // Adjust interval time as needed for Pokeballs
+      }, 200);
       setPokeballIntervals((prevIntervals) => {
         const newIntervals = [...prevIntervals];
         newIntervals[index] = interval;
@@ -125,7 +153,7 @@ const Image = () => {
       });
       setCurrentPokeballIndexes((prevIndexes) => {
         const newIndexes = [...prevIndexes];
-        newIndexes[index] = 0; // Revert back to Pkballs1
+        newIndexes[index] = 0;
         return newIndexes;
       });
     }
@@ -142,7 +170,7 @@ const Image = () => {
           if (!newHovering[i]) {
             setCurrentPokeballIndexes((prevIndexes) => {
               const newIndexes = [...prevIndexes];
-              newIndexes[i] = 0; // Revert back to Pkballs1
+              newIndexes[i] = 0;
               return newIndexes;
             });
           }
@@ -158,21 +186,30 @@ const Image = () => {
   }, [pokeballIntervals]);
 
   const handleProjectsClick = () => {
-    handlePreviousImage(); // Ensure the main image changes first
+    handlePreviousImage();
     setShowProjectsLoading(true);
     setTimeout(() => {
       setShowProjects(true);
       setShowProjectsLoading(false);
-    }, 1000); // Delay of 1 second
+    }, 1000);
   };
 
   const handleAboutClick = () => {
-    handleLastImage(); // Ensure the main image changes first
+    handleLastImage();
     setShowProjectsLoading(true);
     setTimeout(() => {
       setShowAbout(true);
       setShowProjectsLoading(false);
-    }, 1000); // Delay of 1 second
+    }, 1000);
+  };
+
+  const handleContactClick = () => {
+    handleNextImage(); // Ensure the main image changes first
+    setShowProjectsLoading(true);
+    setTimeout(() => {
+      setShowContact(true);
+      setShowProjectsLoading(false);
+    }, 1000);
   };
 
   if (loading) {
@@ -186,10 +223,11 @@ const Image = () => {
   return (
     <div>
       <div className="flex justify-center items-center h-full">
-        <img
+        <LazyLoadImage
           src={images[currentImageIndex]}
           alt=""
-          className="h-[600px] bg-transparent"
+          className="h-[600px] sm:h-[680px] bg-transparent"
+          effect="blur"
         />
         {showProjectsLoading && (
           <div className="fixed inset-0 flex items-center justify-center bg-red-500 bg-opacity-50 z-50">
@@ -198,12 +236,12 @@ const Image = () => {
         )}
         {showProjects && !showProjectsLoading && (
           <div
-            className="fixed top-0 left-0 w-full h-full bg-red-500 bg-opacity-50 flex justify-center items-center z-50"
-            onClick={() => setShowProjects(false)} // Close Projects when clicking outside
+            className="fixed inset-0 flex justify-center items-center z-50 lg:justify-start lg:pl-[150px] bg-slate-500  bg-opacity-80 "
+            onClick={() => setShowProjects(false)}
           >
             <div
-              className="bg-opacity-80 p-4 rounded-lg w-[300px] h-[370px] md:w-[500px] md:h-[500px] flex justify-center items-center"
-              onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the Projects div
+              className=" p-4 rounded-lg w-[300px] h-[370px] md:w-[500px] md:h-[500px] flex justify-center items-center "
+              onClick={(e) => e.stopPropagation()}
             >
               <Projects />
             </div>
@@ -211,22 +249,34 @@ const Image = () => {
         )}
         {showAbout && !showProjectsLoading && (
           <div
-            className="fixed top-0 left-0 w-full h-full bg-red-500 bg-opacity-50 flex justify-center items-center z-50"
-            onClick={() => setShowAbout(false)} // Close About when clicking outside
+            className="fixed inset-0 flex justify-center items-center z-50 lg:justify-end lg:pr-[150px]  bg-slate-500  opacity-80"
+            onClick={() => setShowAbout(false)}
           >
             <div
-              className="bg-opacity-80 p-4 rounded-lg w-[300px] h-[370px] md:w-[500px] md:h-[500px] flex justify-center items-center"
-              onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the About div
+              className=" p-4  rounded-lg w-[300px] h-[370px] md:w-[500px] md:h-[500px] flex justify-center items-center"
+              onClick={(e) => e.stopPropagation()}
             >
-              <About onClose={() => setShowAbout(false)} />{" "}
-              {/* Pass onClose prop */}
+              <About onClose={() => setShowAbout(false)} />
+            </div>
+          </div>
+        )}
+        {showContact && !showProjectsLoading && (
+          <div
+            className="fixed inset-0 flex justify-center items-center z-50  bg-slate-500  opacity-80"
+            onClick={() => setShowContact(false)}
+          >
+            <div
+              className=" p-4 rounded-lg w-[400px] h-[370px] md:w-[500px] md:h-[500px] flex justify-center items-center"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <Contact onClose={() => setShowContact(false)} />
             </div>
           </div>
         )}
       </div>
-      <div className="flex justify-center items-center gap-5 mt-5 cursor-pointer">
+      <div className="flex justify-center items-center gap-5 mb-12 cursor-pointer">
         <div
-          className={`rounded-full h-[120px] w-[120px] ${
+          className={`rounded-full h-[100px] w-[100px] ${
             isTransitioning ? "pointer-events-none" : ""
           }`}
           onMouseEnter={() => {
@@ -247,10 +297,11 @@ const Image = () => {
           }}
           onClick={handleProjectsClick}
         >
-          <img
+          <LazyLoadImage
             src={pokeballImages[currentPokeballIndexes[0]]}
             alt=""
-            className="h-full w-full object-cover"
+            className="h-[100px] w-[100px] sm:h- object-cover"
+            effect="blur"
           />
           <div
             className={`text-center mt-2 bg-black text-white text-xl rounded-2xl opacity-70 p-4 ${
@@ -280,12 +331,13 @@ const Image = () => {
             });
             stopPokeballInterval(1);
           }}
-          onClick={handleNextImage}
+          onClick={handleContactClick} // Attach handleContactClick
         >
-          <img
+          <LazyLoadImage
             src={pokeballImages[currentPokeballIndexes[1]]}
             alt=""
-            className="h-full w-full object-cover"
+            className="h-[100px] w-[100px] sm:h- object-cover"
+            effect="blur"
           />
           <div
             className={`text-center mt-2 bg-black text-white text-xl rounded-2xl opacity-70 p-4 ${
@@ -317,10 +369,11 @@ const Image = () => {
           }}
           onClick={handleAboutClick}
         >
-          <img
+          <LazyLoadImage
             src={pokeballImages[currentPokeballIndexes[2]]}
             alt=""
-            className="h-full w-full object-cover"
+            className="h-[100px] w-[100px]    object-cover"
+            effect="blur"
           />
           <div
             className={`text-center mt-2 bg-black text-white text-xl rounded-2xl opacity-70 p-4 ${
@@ -335,4 +388,4 @@ const Image = () => {
   );
 };
 
-export default Image;
+export default ImageComponent;
