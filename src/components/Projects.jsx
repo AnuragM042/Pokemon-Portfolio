@@ -84,7 +84,7 @@ function Projects() {
             <Card className="w-full h-full gap-2 flex flex-col p-2 border-2 border-black text-white bg-black ">
               <CardHeader
                 color="blue-gray"
-                className="relative h-1/2 rounded-lg"
+                className="relative h-1/2 rounded-lg border border-white"
               >
                 <img
                   src={Image1}
@@ -122,7 +122,7 @@ function Projects() {
           </div>
           <div className="flex justify-center h-full">
             <Card className="w-full h-full gap-2 flex flex-col  p-2 border-2 border-black  text-white bg-black ">
-              <CardHeader color="blue-gray" className="relative h-1/2">
+              <CardHeader color="blue-gray" className="relative h-1/2 border border-white">
                 <img
                   src={Image2}
                   alt="card-image"
@@ -160,7 +160,7 @@ function Projects() {
           </div>
           <div className="flex justify-center h-full">
             <Card className="w-full h-full flex gap-2 flex-col  p-2 border-2 border-black text-white bg-black ">
-              <CardHeader color="blue-gray" className="relative h-1/2">
+              <CardHeader color="blue-gray" className="relative h-1/2 border border-white">
                 <img
                   src={Image3}
                   alt="card-image"

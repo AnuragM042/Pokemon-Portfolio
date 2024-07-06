@@ -18,7 +18,7 @@ const About = ({ onClose }) => {
             <span className="p-4 bg-black bg-opacity-75 text-white text-xl rounded-2xl">
               Hi, I'm <span className="font-bold">Anurag Mishra,</span> a
               20-year-old <span className="font-bold">Frontend Developer </span>
-              with 6 months of experience in Html, Css, Javascript , React.js Firebase, Git, UI..
+              with 6 months of Personal experience in Html, Css, Javascript , React.js Firebase, Git, UI..
             </span>
           </div>
         </div>

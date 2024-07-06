@@ -256,7 +256,7 @@ const ImageComponent = () => {
               className=" p-4  rounded-lg w-[300px] h-[370px] md:w-[500px] md:h-[500px] flex justify-center items-center"
               onClick={(e) => e.stopPropagation()}
             >
-              <About onClose={() => setShowAbout(false)} />
+              <About />
             </div>
           </div>
         )}
@@ -304,9 +304,7 @@ const ImageComponent = () => {
             effect="blur"
           />
           <div
-            className={`text-center mt-2 bg-black text-white text-xl rounded-2xl opacity-70 p-4 ${
-              hoveringIndexes[0] ? "block" : "hidden"
-            }`}
+            className={`text-center mt-2 bg-black bg-opacity-50 hover:bg-opacity-100 text-white text-xl rounded-2xl p-4`}
           >
             Projects
           </div>
@@ -340,9 +338,7 @@ const ImageComponent = () => {
             effect="blur"
           />
           <div
-            className={`text-center mt-2 bg-black text-white text-xl rounded-2xl opacity-70 p-4 ${
-              hoveringIndexes[1] ? "block" : "hidden"
-            }`}
+            className={`text-center mt-2 bg-black bg-opacity-50 hover:bg-opacity-100 text-white text-xl rounded-2xl p-4`}
           >
             Contact
           </div>
@@ -376,9 +372,7 @@ const ImageComponent = () => {
             effect="blur"
           />
           <div
-            className={`text-center mt-2 bg-black text-white text-xl rounded-2xl opacity-70 p-4 ${
-              hoveringIndexes[2] ? "block" : "hidden"
-            }`}
+            className={`text-center mt-2 bg-black bg-opacity-50 hover:bg-opacity-100 text-white text-xl rounded-2xl p-4`}
           >
             About
           </div>
